@@ -1,0 +1,616 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Faiz Store - Download Aplikasi</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+
+        body {
+            background: #f5f5f5;
+        }
+
+        /* Header */
+        .header {
+            background: white;
+            padding: 15px 20px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+            position: sticky;
+            top: 0;
+            z-index: 100;
+        }
+
+        .logo-area {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .logo-area img {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            object-fit: cover;
+        }
+
+        .logo-area h1 {
+            font-size: 22px;
+            color: #4a90e2;
+        }
+
+        .menu-toggle {
+            background: #4a90e2;
+            color: white;
+            border: none;
+            padding: 10px 15px;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 20px;
+        }
+
+        /* Sidebar Menu */
+        .sidebar {
+            position: fixed;
+            top: 0;
+            right: -300px;
+            width: 300px;
+            height: 100%;
+            background: white;
+            box-shadow: -2px 0 10px rgba(0,0,0,0.2);
+            transition: 0.3s;
+            z-index: 1000;
+            overflow-y: auto;
+        }
+
+        .sidebar.open {
+            right: 0;
+        }
+
+        .sidebar-header {
+            padding: 20px;
+            background: #4a90e2;
+            color: white;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .close-btn {
+            background: none;
+            border: none;
+            color: white;
+            font-size: 24px;
+            cursor: pointer;
+        }
+
+        .menu-item {
+            padding: 15px 20px;
+            border-bottom: 1px solid #eee;
+            cursor: pointer;
+            transition: 0.3s;
+        }
+
+        .menu-item:hover {
+            background: #f0f8ff;
+        }
+
+        /* Main Content */
+        .main-container {
+            padding: 20px;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .page {
+            display: none;
+        }
+
+        .page.active {
+            display: block;
+        }
+
+        /* App Cards Grid */
+        .apps-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+            gap: 20px;
+            margin-top: 20px;
+        }
+
+        .app-card {
+            background: white;
+            border-radius: 12px;
+            overflow: hidden;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+            transition: transform 0.2s;
+            cursor: pointer;
+        }
+
+        .app-card:hover {
+            transform: translateY(-5px);
+        }
+
+        .app-card img {
+            width: 100%;
+            height: 150px;
+            object-fit: cover;
+        }
+
+        .app-info {
+            padding: 15px;
+        }
+
+        .app-info h3 {
+            margin-bottom: 5px;
+            color: #333;
+        }
+
+        .app-info p {
+            color: #666;
+            font-size: 14px;
+            margin: 5px 0;
+        }
+
+        .download-btn {
+            background: #4a90e2;
+            color: white;
+            border: none;
+            padding: 8px 15px;
+            border-radius: 20px;
+            cursor: pointer;
+            margin-top: 10px;
+            width: 100%;
+        }
+
+        /* Search Bar */
+        .search-box {
+            margin-bottom: 20px;
+        }
+        .search-box input {
+            width: 100%;
+            padding: 12px;
+            border: 1px solid #ddd;
+            border-radius: 25px;
+            font-size: 16px;
+        }
+
+        /* Login Modal */
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0,0,0,0.5);
+            z-index: 2000;
+            justify-content: center;
+            align-items: center;
+        }
+        .modal-content {
+            background: white;
+            padding: 30px;
+            border-radius: 15px;
+            width: 350px;
+        }
+        .modal-content input {
+            width: 100%;
+            padding: 10px;
+            margin: 10px 0;
+            border: 1px solid #ddd;
+            border-radius: 8px;
+        }
+        .profile-pic {
+            width: 80px;
+            height: 80px;
+            border-radius: 50%;
+            margin: 0 auto 15px;
+            display: block;
+            cursor: pointer;
+        }
+
+        /* Chat */
+        .chat-box {
+            border: 1px solid #ddd;
+            border-radius: 10px;
+            height: 400px;
+            display: flex;
+            flex-direction: column;
+        }
+        .chat-messages {
+            flex: 1;
+            overflow-y: auto;
+            padding: 15px;
+        }
+        .chat-input {
+            display: flex;
+            padding: 10px;
+            border-top: 1px solid #ddd;
+        }
+        .chat-input input {
+            flex: 1;
+            padding: 8px;
+            border: 1px solid #ddd;
+            border-radius: 20px;
+        }
+        .chat-input button {
+            margin-left: 10px;
+            padding: 8px 20px;
+            background: #4a90e2;
+            color: white;
+            border: none;
+            border-radius: 20px;
+        }
+
+        .message-bubble {
+            margin-bottom: 10px;
+            padding: 8px 12px;
+            border-radius: 15px;
+            max-width: 70%;
+        }
+        .user-msg {
+            background: #4a90e2;
+            color: white;
+            margin-left: auto;
+        }
+        .admin-msg {
+            background: #e0e0e0;
+            color: black;
+        }
+
+        /* Testimoni Form */
+        .rating-star {
+            font-size: 30px;
+            cursor: pointer;
+            color: #ddd;
+        }
+        .rating-star.active {
+            color: gold;
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <div class="logo-area">
+            <img src="https://cdn.phototourl.com/free/2026-06-08-b239a564-3b57-4b13-ba1d-7840a76b2063.png" alt="Logo">
+            <h1>Faiz Store</h1>
+        </div>
+        <button class="menu-toggle" onclick="toggleMenu()">☰</button>
+    </div>
+
+    <div class="main-container">
+        <!-- Halaman Beranda -->
+        <div id="homePage" class="page active">
+            <h2>📱 Aplikasi Populer</h2>
+            <div id="infoBanner" style="background: #e8f4fd; padding: 10px; border-radius: 10px; margin: 15px 0;"></div>
+            <div id="appListHome" class="apps-grid"></div>
+        </div>
+
+        <!-- Halaman Pencarian -->
+        <div id="searchPage" class="page">
+            <h2>🔍 Cari Aplikasi</h2>
+            <div class="search-box">
+                <input type="text" id="searchInput" placeholder="Cari aplikasi..." onkeyup="searchApps()">
+            </div>
+            <div id="searchResults" class="apps-grid"></div>
+        </div>
+
+        <!-- Halaman Profile -->
+        <div id="profilePage" class="page">
+            <h2>👤 Profil Saya</h2>
+            <div style="text-align: center;">
+                <img id="profileImage" src="https://via.placeholder.com/100" class="profile-pic" onclick="changeProfilePic()">
+                <input type="text" id="profileName" placeholder="Nama Anda" style="margin: 10px 0; padding: 8px; width: 80%;">
+                <button onclick="updateProfile()" class="download-btn" style="width: auto; padding: 10px 30px;">Simpan Profil</button>
+                <button onclick="logout()" class="download-btn" style="background: #e74c3c; margin-top: 10px;">Keluar / Logout</button>
+            </div>
+        </div>
+
+        <!-- Halaman Chat Admin -->
+        <div id="chatPage" class="page">
+            <h2>💬 Chat Admin</h2>
+            <div class="chat-box">
+                <div class="chat-messages" id="chatMessages"></div>
+                <div class="chat-input">
+                    <input type="text" id="chatInput" placeholder="Tulis pesan...">
+                    <button onclick="sendMessage()">Kirim</button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Halaman Testimoni -->
+        <div id="testimoniPage" class="page">
+            <h2>⭐ Beri Testimoni</h2>
+            <div style="background: white; padding: 20px; border-radius: 10px;">
+                <div id="ratingStars">
+                    <span class="rating-star" data-rating="1">★</span>
+                    <span class="rating-star" data-rating="2">★</span>
+                    <span class="rating-star" data-rating="3">★</span>
+                    <span class="rating-star" data-rating="4">★</span>
+                    <span class="rating-star" data-rating="5">★</span>
+                </div>
+                <textarea id="testimoniComment" rows="3" style="width: 100%; margin: 15px 0; padding: 10px;" placeholder="Tulis komentar Anda..."></textarea>
+                <button onclick="submitTestimoni()" class="btn-submit" style="background: #4a90e2; color: white; padding: 10px 20px; border: none; border-radius: 8px;">Kirim Testimoni</button>
+            </div>
+            <h3 style="margin-top: 30px;">Testimoni Pengguna:</h3>
+            <div id="userTestimonials"></div>
+        </div>
+    </div>
+
+    <div class="sidebar" id="sidebar">
+        <div class="sidebar-header">
+            <h3>Menu</h3>
+            <button class="close-btn" onclick="toggleMenu()">✕</button>
+        </div>
+        <div class="menu-item" onclick="showPage('homePage')">🏠 Halaman Beranda</div>
+        <div class="menu-item" onclick="showPage('searchPage')">🔍 Pencarian Aplikasi</div>
+        <div class="menu-item" onclick="showLoginModal()">🔐 Login / Daftar</div>
+        <div class="menu-item" onclick="showPage('profilePage')">👤 Profil</div>
+        <div class="menu-item" onclick="showPage('chatPage')">💬 Chat Admin</div>
+        <div class="menu-item" onclick="showPage('testimoniPage')">⭐ Testimoni</div>
+    </div>
+
+    <!-- Login Modal -->
+    <div id="loginModal" class="modal">
+        <div class="modal-content">
+            <h3>Login dengan Google</h3>
+            <button onclick="googleLogin()" style="width: 100%; padding: 10px; background: #db4437; color: white; border: none; border-radius: 8px;">Login dengan Google</button>
+            <hr style="margin: 15px 0;">
+            <h3>Atau Login dengan Email</h3>
+            <input type="email" id="loginEmail" placeholder="Email">
+            <input type="text" id="loginName" placeholder="Nama">
+            <button onclick="emailLogin()" style="width: 100%; padding: 10px; background: #4a90e2; color: white; border: none; border-radius: 8px;">Login</button>
+        </div>
+    </div>
+
+    <script>
+        let currentUser = JSON.parse(localStorage.getItem('faiz_currentUser')) || null;
+        let apps = JSON.parse(localStorage.getItem('faiz_apps')) || [];
+        let latestInfo = localStorage.getItem('faiz_latestInfo') || 'Selamat datang di Faiz Store!';
+        let selectedRating = 0;
+
+        function loadHome() {
+            const container = document.getElementById('appListHome');
+            document.getElementById('infoBanner').innerHTML = `<strong>📢 Informasi:</strong> ${latestInfo}`;
+            container.innerHTML = apps.map(app => `
+                <div class="app-card">
+                    <img src="${app.image}" onerror="this.src='https://via.placeholder.com/100'">
+                    <div class="app-info">
+                        <h3>${app.name}</h3>
+                        <p>${app.desc.substring(0, 60)}</p>
+                        <p><small>📦 ${app.size}</small></p>
+                        <button class="download-btn" onclick="downloadApp('${app.link}')">Download</button>
+                    </div>
+                </div>
+            `).join('');
+            if(apps.length === 0) container.innerHTML = '<p>Belum ada aplikasi. Silakan cek lagi nanti.</p>';
+        }
+
+        function searchApps() {
+            const keyword = document.getElementById('searchInput').value.toLowerCase();
+            const filtered = apps.filter(app => app.name.toLowerCase().includes(keyword));
+            const container = document.getElementById('searchResults');
+            container.innerHTML = filtered.map(app => `
+                <div class="app-card">
+                    <img src="${app.image}" onerror="this.src='https://via.placeholder.com/100'">
+                    <div class="app-info">
+                        <h3>${app.name}</h3>
+                        <p>${app.desc.substring(0, 60)}</p>
+                        <button class="download-btn" onclick="downloadApp('${app.link}')">Download</button>
+                    </div>
+                </div>
+            `).join('');
+        }
+
+        function downloadApp(link) {
+            window.open(link, '_blank');
+        }
+
+        function toggleMenu() {
+            document.getElementById('sidebar').classList.toggle('open');
+        }
+
+        function showPage(pageId) {
+            document.querySelectorAll('.page').forEach(page => page.classList.remove('active'));
+            document.getElementById(pageId).classList.add('active');
+            toggleMenu();
+            if(pageId === 'homePage') loadHome();
+            if(pageId === 'testimoniPage') loadUserTestimonials();
+            if(pageId === 'profilePage' && currentUser) {
+                document.getElementById('profileName').value = currentUser.name;
+                document.getElementById('profileImage').src = currentUser.profilePic || 'https://via.placeholder.com/100';
+            }
+        }
+
+        function showLoginModal() {
+            if(currentUser) {
+                alert(`Anda sudah login sebagai ${currentUser.name}`);
+                return;
+            }
+            document.getElementById('loginModal').style.display = 'flex';
+        }
+
+        function googleLogin() {
+            const name = prompt("Masukkan nama Anda:", "User Faiz");
+            if(name) {
+                currentUser = {
+                    email: `${name.replace(/\s/g, '')}@gmail.com`,
+                    name: name,
+                    profilePic: 'https://via.placeholder.com/100'
+                };
+                localStorage.setItem('faiz_currentUser', JSON.stringify(currentUser));
+                alert(`Login berhasil! Selamat datang ${name}`);
+                document.getElementById('loginModal').style.display = 'none';
+                showPage('profilePage');
+            }
+        }
+
+        function emailLogin() {
+            const email = document.getElementById('loginEmail').value;
+            const name = document.getElementById('loginName').value;
+            if(email && name) {
+                currentUser = { email, name, profilePic: 'https://via.placeholder.com/100' };
+                localStorage.setItem('faiz_currentUser', JSON.stringify(currentUser));
+                alert(`Login berhasil! Selamat datang ${name}`);
+                document.getElementById('loginModal').style.display = 'none';
+                showPage('profilePage');
+            } else {
+                alert("Isi email dan nama!");
+            }
+        }
+
+        function updateProfile() {
+            if(currentUser) {
+                currentUser.name = document.getElementById('profileName').value;
+                localStorage.setItem('faiz_currentUser', JSON.stringify(currentUser));
+                alert("Profil berhasil diupdate!");
+            } else {
+                alert("Silakan login terlebih dahulu!");
+            }
+        }
+
+        function changeProfilePic() {
+            const url = prompt("Masukkan URL gambar profil baru:");
+            if(url && currentUser) {
+                currentUser.profilePic = url;
+                localStorage.setItem('faiz_currentUser', JSON.stringify(currentUser));
+                document.getElementById('profileImage').src = url;
+            }
+        }
+
+        function logout() {
+            currentUser = null;
+            localStorage.removeItem('faiz_currentUser');
+            alert("Anda telah logout");
+            showPage('homePage');
+        }
+
+        // Chat System
+        let chatMessages = JSON.parse(localStorage.getItem('faiz_chatMessages')) || [];
+
+        function loadChat() {
+            const container = document.getElementById('chatMessages');
+            container.innerHTML = chatMessages.map(msg => `
+                <div class="message-bubble ${msg.sender === 'user' ? 'user-msg' : 'admin-msg'}">
+                    <strong>${msg.sender === 'user' ? (currentUser?.name || 'Anda') : 'Admin'}:</strong><br>
+                    ${msg.message}
+                    ${msg.reply ? `<br><small>${msg.reply}</small>` : ''}
+                </div>
+            `).join('');
+            container.scrollTop = container.scrollHeight;
+        }
+
+        function sendMessage() {
+            if(!currentUser) {
+                alert("Silakan login terlebih dahulu untuk chat!");
+                return;
+            }
+            const input = document.getElementById('chatInput');
+            const text = input.value.trim();
+            if(text) {
+                const newMsg = {
+                    id: Date.now(),
+                    sender: 'user',
+                    message: text,
+                    userName: currentUser.name,
+                    reply: null
+                };
+                chatMessages.push(newMsg);
+                // Also save to admin messages
+                let adminMessages = JSON.parse(localStorage.getItem('faiz_messages')) || [];
+                adminMessages.push({
+                    id: newMsg.id,
+                    sender: currentUser.name,
+                    message: text,
+                    reply: null
+                });
+                localStorage.setItem('faiz_messages', JSON.stringify(adminMessages));
+                localStorage.setItem('faiz_chatMessages', JSON.stringify(chatMessages));
+                input.value = '';
+                loadChat();
+            }
+        }
+
+        // Testimoni System
+        function setupRating() {
+            document.querySelectorAll('.rating-star').forEach(star => {
+                star.addEventListener('click', function() {
+                    selectedRating = parseInt(this.dataset.rating);
+                    document.querySelectorAll('.rating-star').forEach(s => s.classList.remove('active'));
+                    for(let i=0; i<selectedRating; i++) {
+                        document.querySelectorAll('.rating-star')[i].classList.add('active');
+                    }
+                });
+            });
+        }
+
+        function submitTestimoni() {
+            if(!currentUser) {
+                alert("Silakan login untuk memberi testimoni!");
+                return;
+            }
+            if(selectedRating === 0) {
+                alert("Pilih rating bintang terlebih dahulu!");
+                return;
+            }
+            const comment = document.getElementById('testimoniComment').value;
+            if(!comment) {
+                alert("Tulis komentar Anda!");
+                return;
+            }
+            let testimonials = JSON.parse(localStorage.getItem('faiz_testimonials')) || [];
+            testimonials.push({
+                id: Date.now(),
+                user: currentUser.name,
+                rating: selectedRating,
+                comment: comment,
+                reply: null
+            });
+            localStorage.setItem('faiz_testimonials', JSON.stringify(testimonials));
+            alert("Terima kasih atas testimoni Anda!");
+            document.getElementById('testimoniComment').value = '';
+            selectedRating = 0;
+            document.querySelectorAll('.rating-star').forEach(s => s.classList.remove('active'));
+            loadUserTestimonials();
+        }
+
+        function loadUserTestimonials() {
+            const testimonials = JSON.parse(localStorage.getItem('faiz_testimonials')) || [];
+            const container = document.getElementById('userTestimonials');
+            container.innerHTML = testimonials.map(t => `
+                <div style="background: white; padding: 15px; border-radius: 10px; margin-bottom: 10px;">
+                    <strong>⭐ ${t.user}</strong> - Rating: ${'★'.repeat(t.rating)}${'☆'.repeat(5-t.rating)}<br>
+                    <em>${t.comment}</em><br>
+                    ${t.reply ? `<small><strong>Balasan Admin:</strong> ${t.reply}</small>` : ''}
+                </div>
+            `).join('');
+            if(testimonials.length === 0) container.innerHTML = '<p>Belum ada testimoni.</p>';
+        }
+
+        // Auto refresh data
+        function refreshData() {
+            apps = JSON.parse(localStorage.getItem('faiz_apps')) || [];
+            latestInfo = localStorage.getItem('faiz_latestInfo') || 'Selamat datang di Faiz Store!';
+            if(document.getElementById('homePage').classList.contains('active')) loadHome();
+            chatMessages = JSON.parse(localStorage.getItem('faiz_chatMessages')) || [];
+            if(document.getElementById('chatPage').classList.contains('active')) loadChat();
+        }
+
+        setInterval(refreshData, 2000);
+        setupRating();
+        loadHome();
+        if(currentUser && document.getElementById('profilePage').classList.contains('active')) {
+            document.getElementById('profileName').value = currentUser.name;
+        }
+    </script>
+</body>
+</html>
